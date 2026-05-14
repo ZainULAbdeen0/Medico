@@ -77,3 +77,30 @@
 - `{ doctorId: 1, appointmentDate: 1 }`
 - `patientId`
 - `status`
+
+## Prescriptions
+
+```js
+{
+  _id: ObjectId,
+  appointmentId: ObjectId,
+  patientId: ObjectId,
+  doctorId: ObjectId,
+  medicines: [
+    {
+      name: String,
+      dosage: String,
+      frequency: String,
+      duration: String
+    }
+  ],
+  diagnosis: String,
+  notes: String,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+**Indexes**
+- `appointmentId` — unique
+- `patientId`

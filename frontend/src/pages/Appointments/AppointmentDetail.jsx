@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getAppointment, updateAppointmentStatus } from "../../services/appointmentService";
+import { getPrescriptionByAppointment } from "../../services/prescriptionService";
 import { useAuth } from "../../context/AuthContext";
 
 const AppointmentDetail = () => {
   const { id } = useParams();
   const { user } = useAuth();
   const [appointment, setAppointment] = useState(null);
+  const [prescription, setPrescription] = useState(null);
   const [error, setError] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -19,6 +21,12 @@ const AppointmentDetail = () => {
     fetchAppointment().catch((err) => {
       setError(err?.response?.data?.message || "Failed to load appointment");
     });
+  }, [id]);
+
+  useEffect(() => {
+    getPrescriptionByAppointment(id)
+      .then((response) => setPrescription(response.data.prescription))
+      .catch(() => setPrescription(null));
   }, [id]);
 
   const handleStatus = async (status) => {
@@ -113,8 +121,25 @@ const AppointmentDetail = () => {
         ) : null}
       </div>
 
-      <div className="rounded-lg border border-dashed border-gray-200 p-4 text-sm text-gray-500">
-        Prescription link coming in Sprint 06.
+      <div className="rounded-lg border border-gray-200 p-4">
+        <h2 className="text-sm font-semibold text-gray-700">Prescription</h2>
+        {prescription ? (
+          <Link
+            to={`/prescriptions/${prescription._id}`}
+            className="mt-2 inline-block text-sm font-semibold text-blue-600"
+          >
+            View Prescription
+          </Link>
+        ) : user?.role === "doctor" && appointment.status === "confirmed" ? (
+          <Link
+            to={`/appointments/${appointment._id}/prescribe`}
+            className="mt-2 inline-block rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white"
+          >
+            Write Prescription
+          </Link>
+        ) : (
+          <p className="mt-2 text-sm text-gray-500">No prescription for this appointment.</p>
+        )}
       </div>
     </section>
   );

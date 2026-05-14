@@ -9,6 +9,7 @@ import {
 import { validate } from "../middleware/validate";
 import { createPatientSchema, updatePatientSchema } from "../validators/patientValidators";
 import { authorize, verifyToken } from "../middleware/auth";
+import { getPatientPrescriptions } from "../controllers/prescriptionController";
 
 const router = Router();
 
@@ -21,6 +22,12 @@ router.post(
 );
 router.get("/", verifyToken, getPatients);
 router.get("/:id", verifyToken, getPatient);
+router.get(
+  "/:patientId/prescriptions",
+  verifyToken,
+  authorize(["doctor", "admin", "receptionist"]),
+  getPatientPrescriptions
+);
 router.put(
   "/:id",
   verifyToken,

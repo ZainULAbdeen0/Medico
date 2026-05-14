@@ -7,6 +7,7 @@ import patientRoutes from "./routes/patientRoutes";
 import doctorRoutes from "./routes/doctorRoutes";
 import scheduleRoutes from "./routes/scheduleRoutes";
 import appointmentRoutes from "./routes/appointmentRoutes";
+import prescriptionRoutes from "./routes/prescriptionRoutes";
 import { errorHandler } from "./middleware/errorHandler";
 import { notFound } from "./middleware/notFound";
 
@@ -26,6 +27,7 @@ app.use("/api/patients", patientRoutes);
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/schedules", scheduleRoutes);
 app.use("/api/appointments", appointmentRoutes);
+app.use("/api/prescriptions", prescriptionRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

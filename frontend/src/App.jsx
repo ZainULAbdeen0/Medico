@@ -14,6 +14,8 @@ import ScheduleManager from "./pages/Doctors/ScheduleManager";
 import AppointmentList from "./pages/Appointments/AppointmentList";
 import BookAppointment from "./pages/Appointments/BookAppointment";
 import AppointmentDetail from "./pages/Appointments/AppointmentDetail";
+import PrescriptionForm from "./pages/Prescriptions/PrescriptionForm";
+import PrescriptionView from "./pages/Prescriptions/PrescriptionView";
 
 const App = () => {
     return (
@@ -31,12 +33,16 @@ const App = () => {
                                                 <Route path="/doctors" element={<DoctorList />} />
                                                 <Route path="/appointments" element={<AppointmentList />} />
                                                 <Route path="/appointments/:id" element={<AppointmentDetail />} />
+                                                <Route path="/prescriptions/:id" element={<PrescriptionView />} />
                                                 <Route element={<ProtectedRoute roles={["admin"]} />}>
                                                     <Route path="/doctors/new" element={<DoctorCreate />} />
                                                     <Route path="/doctors/:id/schedule" element={<ScheduleManager />} />
                                                 </Route>
                                                 <Route element={<ProtectedRoute roles={["admin", "receptionist"]} />}>
                                                     <Route path="/appointments/new" element={<BookAppointment />} />
+                                                </Route>
+                                                <Route element={<ProtectedRoute roles={["doctor"]} />}>
+                                                    <Route path="/appointments/:appointmentId/prescribe" element={<PrescriptionForm />} />
                                                 </Route>
                     </Route>
                     <Route path="/" element={<Navigate to="/dashboard" replace />} />
