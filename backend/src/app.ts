@@ -4,6 +4,8 @@ import morgan from "morgan";
 import helmet from "helmet";
 import authRoutes from "./routes/authRoutes";
 import patientRoutes from "./routes/patientRoutes";
+import doctorRoutes from "./routes/doctorRoutes";
+import scheduleRoutes from "./routes/scheduleRoutes";
 import { errorHandler } from "./middleware/errorHandler";
 import { notFound } from "./middleware/notFound";
 
@@ -20,6 +22,8 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/patients", patientRoutes);
+app.use("/api/doctors", doctorRoutes);
+app.use("/api/schedules", scheduleRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
