@@ -11,6 +11,9 @@ import PatientEdit from "./pages/Patients/PatientEdit";
 import DoctorList from "./pages/Doctors/DoctorList";
 import DoctorCreate from "./pages/Doctors/DoctorCreate";
 import ScheduleManager from "./pages/Doctors/ScheduleManager";
+import AppointmentList from "./pages/Appointments/AppointmentList";
+import BookAppointment from "./pages/Appointments/BookAppointment";
+import AppointmentDetail from "./pages/Appointments/AppointmentDetail";
 
 const App = () => {
     return (
@@ -26,9 +29,14 @@ const App = () => {
                         <Route path="/patients/:id" element={<PatientDetail />} />
                         <Route path="/patients/:id/edit" element={<PatientEdit />} />
                                                 <Route path="/doctors" element={<DoctorList />} />
+                                                <Route path="/appointments" element={<AppointmentList />} />
+                                                <Route path="/appointments/:id" element={<AppointmentDetail />} />
                                                 <Route element={<ProtectedRoute roles={["admin"]} />}>
                                                     <Route path="/doctors/new" element={<DoctorCreate />} />
                                                     <Route path="/doctors/:id/schedule" element={<ScheduleManager />} />
+                                                </Route>
+                                                <Route element={<ProtectedRoute roles={["admin", "receptionist"]} />}>
+                                                    <Route path="/appointments/new" element={<BookAppointment />} />
                                                 </Route>
                     </Route>
                     <Route path="/" element={<Navigate to="/dashboard" replace />} />
