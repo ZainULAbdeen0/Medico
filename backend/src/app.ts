@@ -8,6 +8,7 @@ import doctorRoutes from "./routes/doctorRoutes";
 import scheduleRoutes from "./routes/scheduleRoutes";
 import appointmentRoutes from "./routes/appointmentRoutes";
 import prescriptionRoutes from "./routes/prescriptionRoutes";
+import analyticsRoutes from "./routes/analyticsRoutes";
 import { errorHandler } from "./middleware/errorHandler";
 import { notFound } from "./middleware/notFound";
 
@@ -28,6 +29,7 @@ app.use("/api/doctors", doctorRoutes);
 app.use("/api/schedules", scheduleRoutes);
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/prescriptions", prescriptionRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
