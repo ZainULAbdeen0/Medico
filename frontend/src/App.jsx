@@ -8,6 +8,7 @@ import PatientList from "./pages/Patients/PatientList";
 import PatientDetail from "./pages/Patients/PatientDetail";
 import PatientCreate from "./pages/Patients/PatientCreate";
 import PatientEdit from "./pages/Patients/PatientEdit";
+import PatientHistory from "./pages/Patients/PatientHistory";
 import DoctorList from "./pages/Doctors/DoctorList";
 import DoctorCreate from "./pages/Doctors/DoctorCreate";
 import ScheduleManager from "./pages/Doctors/ScheduleManager";
@@ -30,6 +31,7 @@ const App = () => {
                         <Route path="/patients/new" element={<PatientCreate />} />
                         <Route path="/patients/:id" element={<PatientDetail />} />
                         <Route path="/patients/:id/edit" element={<PatientEdit />} />
+                        <Route path="/patients/:id/history" element={<PatientHistory />} />
                                                 <Route path="/doctors" element={<DoctorList />} />
                                                 <Route path="/appointments" element={<AppointmentList />} />
                                                 <Route path="/appointments/:id" element={<AppointmentDetail />} />

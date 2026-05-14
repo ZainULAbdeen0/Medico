@@ -10,6 +10,7 @@ import { validate } from "../middleware/validate";
 import { createPatientSchema, updatePatientSchema } from "../validators/patientValidators";
 import { authorize, verifyToken } from "../middleware/auth";
 import { getPatientPrescriptions } from "../controllers/prescriptionController";
+import { getPatientHistory } from "../controllers/patientHistoryController";
 
 const router = Router();
 
@@ -27,6 +28,12 @@ router.get(
   verifyToken,
   authorize(["doctor", "admin", "receptionist"]),
   getPatientPrescriptions
+);
+router.get(
+  "/:patientId/history",
+  verifyToken,
+  authorize(["doctor", "admin", "receptionist"]),
+  getPatientHistory
 );
 router.put(
   "/:id",

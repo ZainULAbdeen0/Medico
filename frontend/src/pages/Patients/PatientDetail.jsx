@@ -73,9 +73,12 @@ const PatientDetail = () => {
         </div>
       </div>
 
-      <div className="rounded-lg border border-dashed border-gray-200 p-4 text-sm text-gray-500">
-        Appointment history coming soon.
-      </div>
+      <Link
+        to={`/patients/${id}/history`}
+        className="inline-block rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+      >
+        View Full History
+      </Link>
     </section>
   );
 };
