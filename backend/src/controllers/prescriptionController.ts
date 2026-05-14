@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import Prescription from "../models/Prescription";
 import Appointment from "../models/Appointment";
 import Doctor from "../models/Doctor";
+import { log } from "../services/auditService";
+import { AUDIT_ACTIONS } from "../utils/auditActions";
 
 const populatePrescription = [
   { path: "patientId", select: "name" },
@@ -46,6 +48,14 @@ export const createPrescription = async (req: Request, res: Response, next: Next
 
     appointment.status = "completed";
     await appointment.save();
+
+    log({
+      userId: req.user!.userId,
+      action: AUDIT_ACTIONS.CREATE_PRESCRIPTION,
+      resource: "prescriptions",
+      resourceId: prescription._id.toString(),
+      ipAddress: req.ip
+    });
 
     const populated = await Prescription.findById(prescription._id).populate(populatePrescription);
     res.status(201).json({ success: true, prescription: populated });

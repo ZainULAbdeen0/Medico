@@ -7,7 +7,8 @@ const navItems = [
     { label: "Doctors", to: "/doctors", roles: ["admin"] },
     { label: "Appointments", to: "/appointments", roles: ["admin", "doctor", "receptionist"] },
     { label: "Prescriptions", to: "/prescriptions", roles: ["doctor"] },
-    { label: "Analytics", to: "/analytics", roles: ["admin"] }
+    { label: "Analytics", to: "/analytics", roles: ["admin"] },
+    { label: "Audit Logs", to: "/audit-logs", roles: ["admin"] }
 ];
 
 const Sidebar = () => {

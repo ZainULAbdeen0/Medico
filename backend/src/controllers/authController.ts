@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { Secret, SignOptions } from "jsonwebtoken";
 import User from "../models/User";
+import { log } from "../services/auditService";
+import { AUDIT_ACTIONS } from "../utils/auditActions";
 
 const signToken = (payload: { userId: string; role: string; name: string }): string => {
   const secret = process.env.JWT_SECRET as Secret | undefined;
@@ -45,6 +47,15 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     }
 
     const token = signToken({ userId: user._id.toString(), role: user.role, name: user.name });
+
+    log({
+      userId: user._id.toString(),
+      action: AUDIT_ACTIONS.USER_LOGIN,
+      resource: "users",
+      resourceId: user._id.toString(),
+      ipAddress: req.ip
+    });
+
     res.json({
       success: true,
       token,

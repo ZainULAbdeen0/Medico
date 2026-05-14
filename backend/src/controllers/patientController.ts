@@ -1,11 +1,21 @@
 import { Request, Response, NextFunction } from "express";
 import Patient from "../models/Patient";
+import { log } from "../services/auditService";
+import { AUDIT_ACTIONS } from "../utils/auditActions";
 
 export const createPatient = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const patient = await Patient.create({
       ...req.body,
       registeredBy: req.user?.userId
+    });
+
+    log({
+      userId: req.user!.userId,
+      action: AUDIT_ACTIONS.CREATE_PATIENT,
+      resource: "patients",
+      resourceId: patient._id.toString(),
+      ipAddress: req.ip
     });
 
     res.status(201).json({ success: true, patient });
@@ -88,6 +98,14 @@ export const deletePatient = async (req: Request, res: Response, next: NextFunct
       res.status(404).json({ success: false, message: "Patient not found" });
       return;
     }
+
+    log({
+      userId: req.user!.userId,
+      action: AUDIT_ACTIONS.DELETE_PATIENT,
+      resource: "patients",
+      resourceId: patient._id.toString(),
+      ipAddress: req.ip
+    });
 
     res.json({ success: true, patient });
   } catch (error) {

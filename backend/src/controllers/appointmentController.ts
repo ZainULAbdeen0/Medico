@@ -3,6 +3,8 @@ import Appointment, { AppointmentStatus } from "../models/Appointment";
 import Doctor from "../models/Doctor";
 import Patient from "../models/Patient";
 import { checkConflict } from "../services/appointmentService";
+import { log } from "../services/auditService";
+import { AUDIT_ACTIONS } from "../utils/auditActions";
 
 const populateAppointment = [
   { path: "patientId", select: "name bloodGroup" },
@@ -41,6 +43,14 @@ export const createAppointment = async (req: Request, res: Response, next: NextF
       notes,
       status: "pending",
       createdBy: req.user?.userId
+    });
+
+    log({
+      userId: req.user!.userId,
+      action: AUDIT_ACTIONS.CREATE_APPOINTMENT,
+      resource: "appointments",
+      resourceId: appointment._id.toString(),
+      ipAddress: req.ip
     });
 
     const populated = await Appointment.findById(appointment._id).populate(populateAppointment);
@@ -151,6 +161,15 @@ export const updateStatus = async (req: Request, res: Response, next: NextFuncti
 
     appointment.status = nextStatus;
     await appointment.save();
+
+    log({
+      userId: req.user!.userId,
+      action: AUDIT_ACTIONS.UPDATE_APPOINTMENT_STATUS,
+      resource: "appointments",
+      resourceId: appointment._id.toString(),
+      ipAddress: req.ip
+    });
+
     const populated = await Appointment.findById(appointment._id).populate(populateAppointment);
     res.json({ success: true, appointment: populated });
   } catch (error) {

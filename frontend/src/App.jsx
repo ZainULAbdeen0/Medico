@@ -17,6 +17,7 @@ import BookAppointment from "./pages/Appointments/BookAppointment";
 import AppointmentDetail from "./pages/Appointments/AppointmentDetail";
 import PrescriptionForm from "./pages/Prescriptions/PrescriptionForm";
 import PrescriptionView from "./pages/Prescriptions/PrescriptionView";
+import AuditLogs from "./pages/Admin/AuditLogs";
 
 const App = () => {
     return (
@@ -39,6 +40,7 @@ const App = () => {
                                                 <Route element={<ProtectedRoute roles={["admin"]} />}>
                                                     <Route path="/doctors/new" element={<DoctorCreate />} />
                                                     <Route path="/doctors/:id/schedule" element={<ScheduleManager />} />
+                                                    <Route path="/audit-logs" element={<AuditLogs />} />
                                                 </Route>
                                                 <Route element={<ProtectedRoute roles={["admin", "receptionist"]} />}>
                                                     <Route path="/appointments/new" element={<BookAppointment />} />
