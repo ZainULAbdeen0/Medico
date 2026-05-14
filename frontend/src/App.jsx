@@ -1,0 +1,33 @@
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Layout from "./components/layout/Layout";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Unauthorized from "./pages/Unauthorized";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import PatientList from "./pages/Patients/PatientList";
+import PatientDetail from "./pages/Patients/PatientDetail";
+import PatientCreate from "./pages/Patients/PatientCreate";
+import PatientEdit from "./pages/Patients/PatientEdit";
+
+const App = () => {
+    return (
+        <BrowserRouter>
+            <Layout>
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/unauthorized" element={<Unauthorized />} />
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/patients" element={<PatientList />} />
+                        <Route path="/patients/new" element={<PatientCreate />} />
+                        <Route path="/patients/:id" element={<PatientDetail />} />
+                        <Route path="/patients/:id/edit" element={<PatientEdit />} />
+                    </Route>
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                </Routes>
+            </Layout>
+        </BrowserRouter>
+    );
+};
+
+export default App;
