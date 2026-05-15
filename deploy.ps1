@@ -60,6 +60,11 @@ function Invoke-Native {
 try {
     Write-Step "Deploy started. Repo=$RepoRoot Branch=$Branch"
 
+    # Force npm to install devDependencies (typescript, vite) regardless of any
+    # system-wide NODE_ENV=production setting. Only affects this script's scope.
+    $env:NODE_ENV = "development"
+    $env:NPM_CONFIG_PRODUCTION = "false"
+
     # 1. Pull latest
     Write-Step "Fetching and resetting to origin/$Branch"
     Invoke-Native -Exe "git" -ArgList @("fetch","origin",$Branch)         -WorkDir $RepoRoot -Label "git fetch"
@@ -67,18 +72,26 @@ try {
     Invoke-Native -Exe "git" -ArgList @("reset","--hard","origin/$Branch") -WorkDir $RepoRoot -Label "git reset"
 
     # 2. Backend install + build
-    Write-Step "Backend: npm ci"
-    Invoke-Native -Exe "npm" -ArgList @("ci") -WorkDir $BackendPath -Label "backend npm ci"
+    Write-Step "Backend: npm ci (incl. dev deps)"
+    Invoke-Native -Exe "npm" -ArgList @("ci","--include=dev") -WorkDir $BackendPath -Label "backend npm ci"
 
     Write-Step "Backend: npm run build"
     Invoke-Native -Exe "npm" -ArgList @("run","build") -WorkDir $BackendPath -Label "backend build"
 
+    if (-not (Test-Path (Join-Path $BackendPath "dist\server.js"))) {
+        throw "Backend build finished but dist\server.js is missing - tsc did not emit output."
+    }
+
     # 3. Frontend install + build
-    Write-Step "Frontend: npm ci"
-    Invoke-Native -Exe "npm" -ArgList @("ci") -WorkDir $FrontendPath -Label "frontend npm ci"
+    Write-Step "Frontend: npm ci (incl. dev deps)"
+    Invoke-Native -Exe "npm" -ArgList @("ci","--include=dev") -WorkDir $FrontendPath -Label "frontend npm ci"
 
     Write-Step "Frontend: npm run build"
     Invoke-Native -Exe "npm" -ArgList @("run","build") -WorkDir $FrontendPath -Label "frontend build"
+
+    if (-not (Test-Path (Join-Path $FrontendPath "dist\index.html"))) {
+        throw "Frontend build finished but dist\index.html is missing - vite did not emit output."
+    }
 
     # 4. Restart IIS apps
     Write-Step "Loading WebAdministration module"
