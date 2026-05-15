@@ -32,9 +32,9 @@ app.get("/docs", apiReference({ spec: openApiSpec }));
 
 const startServer = async (): Promise<void> => {
   await connectDatabase(env.MONGODB_URI);
-  const port = Number(env.PORT);
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+  const port: string | number = /^\d+$/.test(env.PORT) ? Number(env.PORT) : env.PORT;
+  app.listen(port as never, () => {
+    console.log(`Server listening on ${port}`);
   });
 };
 
