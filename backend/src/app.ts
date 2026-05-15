@@ -40,6 +40,25 @@ app.use("/api/prescriptions", prescriptionRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/audit-logs", auditRoutes);
 
+// Scalar's UI loads its bundle from jsDelivr and has an inline boot script,
+// so the global strict CSP (script-src 'self') would block both. Override
+// CSP for this path only and drop upgrade-insecure-requests so the page
+// works over plain HTTP without the browser trying to upgrade to HTTPS.
+app.use(
+  "/docs",
+  helmet.contentSecurityPolicy({
+    useDefaults: false,
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com"],
+      imgSrc: ["'self'", "data:", "https:"],
+      fontSrc: ["'self'", "https:", "data:"],
+      connectSrc: ["'self'", "https:", "http:"],
+      workerSrc: ["'self'", "blob:"]
+    }
+  })
+);
 app.get("/docs", apiReference({ spec: openApiSpec }));
 
 app.use(notFound);
