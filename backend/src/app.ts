@@ -59,7 +59,7 @@ app.use(
     }
   })
 );
-app.get("/docs", apiReference({ spec: openApiSpec }));
+app.get("/docs", apiReference({ spec: { content: openApiSpec } }));
 
 app.use(notFound);
 app.use(errorHandler);
