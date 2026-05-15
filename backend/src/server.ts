@@ -1,10 +1,14 @@
+import path from "path";
 import dotenv from "dotenv";
 import { apiReference } from "@scalar/express-api-reference";
 import app from "./app";
 import { connectDatabase } from "./config/db";
 import { validateEnv } from "./config/env";
 
-dotenv.config();
+// In production the compiled file lives in dist/, so .env (which lives at
+// the project root next to package.json) is one directory up. In dev (ts-node)
+// __dirname is src/, and .env is still one directory up. Either way: ../.env
+dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
 
 const env = validateEnv();
 
