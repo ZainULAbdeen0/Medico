@@ -1,6 +1,5 @@
 import path from "path";
 import dotenv from "dotenv";
-import { apiReference } from "@scalar/express-api-reference";
 import app from "./app";
 import { connectDatabase } from "./config/db";
 import { validateEnv } from "./config/env";
@@ -11,28 +10,6 @@ import { validateEnv } from "./config/env";
 dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
 
 const env = validateEnv();
-
-const openApiSpec = {
-  openapi: "3.0.0",
-  info: {
-    title: "Hospital API",
-    version: "1.0.0"
-  },
-  paths: {
-    "/": {
-      get: {
-        summary: "Health check",
-        responses: {
-          "200": {
-            description: "OK"
-          }
-        }
-      }
-    }
-  }
-};
-
-app.get("/docs", apiReference({ spec: openApiSpec }));
 
 const startServer = async (): Promise<void> => {
   await connectDatabase(env.MONGODB_URI);

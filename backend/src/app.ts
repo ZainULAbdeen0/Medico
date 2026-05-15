@@ -3,6 +3,7 @@ import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
 import mongoSanitize from "express-mongo-sanitize";
+import { apiReference } from "@scalar/express-api-reference";
 import { apiLimiter } from "./middleware/rateLimiter";
 import authRoutes from "./routes/authRoutes";
 import patientRoutes from "./routes/patientRoutes";
@@ -14,6 +15,7 @@ import analyticsRoutes from "./routes/analyticsRoutes";
 import auditRoutes from "./routes/auditRoutes";
 import { errorHandler } from "./middleware/errorHandler";
 import { notFound } from "./middleware/notFound";
+import { openApiSpec } from "./config/openApi";
 
 const app = express();
 
@@ -37,6 +39,8 @@ app.use("/api/appointments", appointmentRoutes);
 app.use("/api/prescriptions", prescriptionRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/audit-logs", auditRoutes);
+
+app.get("/docs", apiReference({ spec: openApiSpec }));
 
 app.use(notFound);
 app.use(errorHandler);
