@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Sidebar from "./Sidebar";
+import logo from "../../assets/logo.png";
 
 const Layout = ({ children }) => {
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -16,8 +17,11 @@ const Layout = ({ children }) => {
                 >
                     Menu
                 </button>
-                <div className="text-sm font-semibold text-gray-900">
-                    Hospital Admin
+                <div className="flex items-center gap-2">
+                    <img src={logo} alt="Mediko Clinics" className="h-7 w-7 rounded-md object-contain" />
+                    <span className="text-sm font-semibold text-gray-900">
+                        Mediko Clinics
+                    </span>
                 </div>
                 <div className="w-[60px]" aria-hidden="true" />
             </div>

@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import logo from "../assets/logo.png";
 
 const loginSchema = z.object({
     email: z
@@ -63,11 +64,19 @@ const Login = () => {
         <div className="min-h-screen bg-gray-50 px-4 py-10 flex items-center justify-center">
             <div className="w-full max-w-md">
                 <div className="rounded-lg border border-gray-200 bg-white shadow-sm p-6 sm:p-8">
-                    <div className="mb-6 space-y-1">
-                        <h1 className="text-xl font-semibold text-gray-900">
-                            Hospital Management
-                        </h1>
-                        <p className="text-sm text-gray-500">
+                    <div className="mb-6 flex flex-col items-center text-center">
+                        <img
+                            src={logo}
+                            alt="Mediko Clinics"
+                            className="mb-3 aspect-16/9 rounded-md object-contain"
+                        />
+                        {/* <h1 className="text-xl font-semibold text-gray-900">
+                            Mediko Clinics
+                        </h1> */}
+                        <p className="text-sm font-medium text-gray-600">
+                            Hospital Manager
+                        </p>
+                        <p className="mt-1 text-sm text-gray-500">
                             Sign in to your account
                         </p>
                     </div>
@@ -88,9 +97,8 @@ const Login = () => {
                                 id="email"
                                 type="email"
                                 autoComplete="email"
-                                className={`${inputBase} ${
-                                    errors.email ? inputInvalid : inputValid
-                                }`}
+                                className={`${inputBase} ${errors.email ? inputInvalid : inputValid
+                                    }`}
                                 placeholder="you@example.com"
                                 aria-invalid={errors.email ? "true" : "false"}
                                 {...register("email")}
@@ -122,11 +130,10 @@ const Login = () => {
                                 id="password"
                                 type={showPassword ? "text" : "password"}
                                 autoComplete="current-password"
-                                className={`${inputBase} ${
-                                    errors.password || serverError
-                                        ? inputInvalid
-                                        : inputValid
-                                }`}
+                                className={`${inputBase} ${errors.password || serverError
+                                    ? inputInvalid
+                                    : inputValid
+                                    }`}
                                 placeholder="••••••••"
                                 aria-invalid={
                                     errors.password || serverError
